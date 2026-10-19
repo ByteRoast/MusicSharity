@@ -12,6 +12,15 @@
   [![Platform](https://img.shields.io/badge/Platform-Android%20|%20Linux%20|%20Web%20|%20Windows-brightgreen)](https://github.com/ByteRoast/music-sharity/releases/latest)
 </div>
 
+> [!CAUTION]
+> **This project is discontinued and no longer maintained.**
+>
+> Music Sharity relied entirely on the [Odesli/song.link](https://odesli.co) API, which has been shut down. Rebuilding the conversion feature on top of web scraping is not something I want to pursue, so development has stopped.
+>
+> If you are looking for a replacement, check out [SongPort](https://songport.link): it does everything Music Sharity did, and does it much better.
+>
+> The code remains available for reference under the GPL v3 license.
+
 > [!WARNING]
 > Currently only **Android**, **Windows**, **Linux** and **Web** builds are officially released and supported.
 > 
