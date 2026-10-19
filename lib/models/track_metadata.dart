@@ -15,10 +15,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import 'package:hive/hive.dart';
+
+part 'track_metadata.g.dart';
+
+@HiveType(typeId: 1)
 class TrackMetadata {
+  @HiveField(0)
   final String title;
+
+  @HiveField(1)
   final String artist;
+
+  @HiveField(2)
   final String? album;
+
+  @HiveField(3)
   final String? imageUrl;
 
   TrackMetadata({

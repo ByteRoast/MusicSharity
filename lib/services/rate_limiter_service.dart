@@ -17,8 +17,13 @@
  */
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../exceptions/rate_limit_exception.dart';
 
 class RateLimiterService {
+  static final RateLimiterService _instance = RateLimiterService._internal();
+  factory RateLimiterService() => _instance;
+  RateLimiterService._internal();
+
   static const int maxRequests = 10;
   static const Duration windowDuration = Duration(minutes: 1);
   static const String _storageKey = 'rate_limiter_timestamps';
@@ -28,17 +33,16 @@ class RateLimiterService {
       StreamController<int>.broadcast();
 
   bool _isInitialized = false;
-
-  static final RateLimiterService _instance = RateLimiterService._internal();
-
-  factory RateLimiterService() => _instance;
-
-  RateLimiterService._internal() {
-    _loadTimestamps();
-  }
+  Completer<void>? _initializationCompleter;
 
   Future<void> _loadTimestamps() async {
     if (_isInitialized) return;
+
+    if (_initializationCompleter != null) {
+      return _initializationCompleter!.future;
+    }
+
+    _initializationCompleter = Completer<void>();
 
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -63,6 +67,7 @@ class RateLimiterService {
 
     _isInitialized = true;
     _quotaController.add(remainingQuota);
+    _initializationCompleter!.complete();
   }
 
   Future<void> _saveTimestamps() async {
@@ -149,14 +154,4 @@ class RateLimiterService {
   void dispose() {
     _quotaController.close();
   }
-}
-
-class RateLimitException implements Exception {
-  final String message;
-  final Duration waitTime;
-
-  RateLimitException(this.message, this.waitTime);
-
-  @override
-  String toString() => message;
 }
